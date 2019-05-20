@@ -1,7 +1,7 @@
 package com.oclye.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.oclye.config.WebSocketConfig;
-import com.oclye.model.User;
 import com.oclye.model.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author ocly
@@ -27,8 +29,13 @@ public class UserService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		String onlinuser = webSocketConfig.users.toString();
-		if (onlinuser.contains(username) || "阳仔".equals(username)) {
-			throw new UsernameNotFoundException("用户已存在");
+		JSONObject parseObject = JSONObject.parseObject(onlinuser);
+		System.out.println("parseObject---" + parseObject.toString());
+
+		for (Map.Entry<String, Object> entry : parseObject.entrySet()) {
+			if (username.equals(entry.getValue()) || "阳仔".equals(username)) {
+				throw new UsernameNotFoundException("用户已存在");
+			}
 		}
 		List<GrantedAuthority> authorities = new ArrayList<>();
 		authorities.add(new SimpleGrantedAuthority("USER"));
