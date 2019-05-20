@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * @author ocly
  * @date 2018/2/3 17:18
@@ -22,19 +21,20 @@ import java.util.List;
 @Service
 public class UserService implements UserDetailsService {
 
-  @Autowired
-  WebSocketConfig webSocketConfig;
+	@Autowired
+	WebSocketConfig webSocketConfig;
+
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    String onlinuser = webSocketConfig.users.toString();
-    if (onlinuser.contains(username)||"机器人".equals(username)) {
-      throw new UsernameNotFoundException("用户已存在");
-    }
-    List<GrantedAuthority> authorities = new ArrayList<>();
-    authorities.add(new SimpleGrantedAuthority("USER"));
-    UserPrincipal user = new UserPrincipal(username,"",authorities);
-    user.setName(username);
-    return user;
+		String onlinuser = webSocketConfig.users.toString();
+		if (onlinuser.contains(username) || "阳仔".equals(username)) {
+			throw new UsernameNotFoundException("用户已存在");
+		}
+		List<GrantedAuthority> authorities = new ArrayList<>();
+		authorities.add(new SimpleGrantedAuthority("USER"));
+		UserPrincipal user = new UserPrincipal(username, "", authorities);
+		user.setName(username);
+		return user;
 	}
 
 }
