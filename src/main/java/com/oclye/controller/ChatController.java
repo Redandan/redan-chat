@@ -61,7 +61,7 @@ public class ChatController {
 	 */
 	@MessageMapping("/private")
 	public void privatechat(ChatMessage message) throws Exception {
-
+		System.out.println(message);
 		String ctx = message.getContent();
 		String userid = message.getName();
 		String touser = message.getReceiver();
