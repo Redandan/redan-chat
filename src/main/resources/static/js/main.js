@@ -105,15 +105,9 @@ function sendMessage(event) {
     var messageContent = messageInput.value.trim();
 
     if(messageContent && stompClient) {
-//        var chatMessage = {
-//        	name: username,
-//            content: messageInput.value,
-//            receiver: '\u5ba2\u670d\u5c0f\u59d0'
-//        };
         stompClient.send("/app/private", {}, JSON.stringify(
         		{'name': username, 'content': messageInput.value, 'receiver': '\u5ba2\u670d\u5c0f\u59d0'}));
     	
-//        stompClient.send("/app/private", {}, JSON.stringify(chatMessage));
         messageInput.value = '';
     }
     event.preventDefault();
@@ -124,7 +118,7 @@ function onMessageReceived(payload) {
 	
     var message = JSON.parse(payload.body);
     var messageElement = document.createElement('li');
-
+    
     if(message.type === 'JOIN') {
         messageElement.classList.add('event-message');
         message.content = message.name + ' joined!';
@@ -133,7 +127,7 @@ function onMessageReceived(payload) {
         message.content = message.name + ' left!';
     } else {
         messageElement.classList.add('chat-message');
-
+        console.log(message);
         var avatarElement = document.createElement('i');
         var avatarText = document.createTextNode(message.name);
         avatarElement.appendChild(avatarText);
