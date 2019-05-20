@@ -70,7 +70,11 @@ public class ChatController {
 		String content = date + "【" + userid + "】对你说：" + ctx;
 		String contents = date + " 你对【" + touser + "】说：" + ctx;
 
-		template.convertAndSendToUser(userid, "/topic/private", new ChatMessage(userid, contents, touser, date));
+		if (userid.equals("客服小姐")) {
+			template.convertAndSendToUser(userid, "/topic/private", new ChatMessage(touser, contents, touser, date));
+		} else {
+			template.convertAndSendToUser(userid, "/topic/private", new ChatMessage(userid, contents, touser, date));
+		}
 		Thread.sleep(1000);
 		if ("阳仔".equals(touser)) {
 			touser = userid;
