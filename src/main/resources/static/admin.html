@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Hello WebSocket</title>
+<title>客服後台</title>
 <meta charset="utf-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -30,9 +30,9 @@
 							<input type="text" name="username" id="username"
 								class="form-control" value="客服小姐"> <span
 								class="input-group-btn">
-								<button id="connect" class="btn btn-default" type="submit">连接</button>
+								<button id="connect" class="btn btn-default" type="submit">連接</button>
 								<button id="disconnect" class="btn btn-default" type="submit"
-									disabled="disabled">断开</button>
+									disabled="disabled">斷開</button>
 							</span>
 						</div>
 					</div>
@@ -46,7 +46,7 @@
 				<table id="userlist" class="table">
 					<thead onclick='javascript:hidetuser()'>
 						<tr>
-							<th>在线用户</th>
+							<th>線上客戶</th>
 						</tr>
 					</thead>
 					<tbody id="user" style="height: 350px; overflow-y: auto;">
@@ -66,10 +66,10 @@
 				</table>
 				<div class="input-group" style="height: 74px">
 					<textarea id="contentuser" class="form-control" rows="3"
-						style="resize: none;" placeholder="单击一名在线用户，与其聊天吧...."></textarea>
+						style="resize: none;" placeholder="點擊一名線上客戶，與其聊天吧...."></textarea>
 					<span class="input-group-btn">
 						<button id="sendtouser" class="btn btn-default" type="submit"
-							disabled="disabled" style="height: 100%">发送</button>
+							disabled="disabled" style="height: 100%">發送</button>
 					</span>
 				</div>
 			</div>

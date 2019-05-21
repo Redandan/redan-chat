@@ -46,7 +46,7 @@ public class ChatController {
 	@SendTo("/topic/greetings")
 	public ChatMessage greeting(ChatMessage message) throws Exception {
 		String date = simpleDateFormat.format(new Date());
-		String content = date + "【" + message.getName() + "】说：" + message.getContent();
+		String content = date + "【" + message.getName() + "】說：" + message.getContent();
 		message.setDate(date);
 		message.setContent(content);
 		Thread.sleep(1000);
@@ -67,8 +67,8 @@ public class ChatController {
 		String touser = message.getReceiver();
 
 		String date = simpleDateFormat.format(new Date());
-		String content = date + "【" + userid + "】对你说：" + ctx;
-		String contents = date + " 你对【" + touser + "】说：" + ctx;
+		String content = date + "【" + userid + "】對您說：" + ctx;
+		String contents = date + " 您對【" + touser + "】說：" + ctx;
 
 		template.convertAndSendToUser(userid, "/topic/private", new ChatMessage(touser, contents, touser, date));
 		Thread.sleep(1000);

@@ -94,7 +94,7 @@ function sendToUser() {
 function touser(message) {
   $("#" + message.id + " span").html('');
   if ($("#privateuser").html() === '私信聊天') {
-    $("#privateuser").html("私信聊天 与 【" + message.textContent + "】");
+    $("#privateuser").html("私信聊天 為 【" + message.textContent + "】");
     $(".msg-" + message.textContent).prop("hidden", false);
     return;
   }
@@ -104,7 +104,7 @@ function touser(message) {
     return;
   }
   $(".msg-" + tousername).prop("hidden", true);
-  $("#privateuser").html("私信聊天 与 【" + message.textContent + "】");
+  $("#privateuser").html("私信聊天 為 【" + message.textContent + "】");
   $(".msg-" + message.textContent).prop("hidden", false);
 }
 

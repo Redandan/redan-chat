@@ -3,7 +3,7 @@
   <head>
   	<meta charset="utf-8"/>
       <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-      <title>Spring Boot WebSocket Chat Application | CalliCoder</title>
+      <title>客服系統</title>
       <link rel="stylesheet" href="/css/main.css" />
   </head>
   <body>
@@ -13,13 +13,13 @@
 
     <div id="username-page">
         <div class="username-page-container">
-            <h1 class="title">輸入你的名子</h1>
+            <h1 class="title">請輸入您的名子</h1>
             <form id="usernameForm" name="usernameForm">
                 <div class="form-group">
                     <input type="text" id="name" placeholder="Username" autocomplete="off" class="form-control" />
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="accent username-submit">Start Chatting</button>
+                    <button type="submit" class="accent username-submit">接通客服</button>
                 </div>
             </form>
         </div>
@@ -28,10 +28,10 @@
     <div id="chat-page" class="hidden">
         <div class="chat-container">
             <div class="chat-header">
-                <h2>橙姑娘客服</h2>
+                <h2>文字客服</h2>
             </div>
             <div class="connecting">
-                Connecting...
+                	連線中...
             </div>
             <ul id="messageArea">
 
