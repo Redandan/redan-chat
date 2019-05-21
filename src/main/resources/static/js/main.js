@@ -12,8 +12,8 @@ var stompClient = null;
 var username = null;
 
 var colors = [
-    '#2196F3', '#32c787', '#00BCD4', '#ff5652',
-    '#ffc107', '#ff85af', '#FF9800', '#39bbb0'
+	'#2196F3', '#32c787', '#00BCD4', '#ff5652',
+	'#ffc107', '#ff85af', '#FF9800', '#39bbb0'
 ];
 
 
@@ -44,123 +44,121 @@ function connect() {
 }
 
 function connect(event) {
-    username = document.querySelector('#name').value.trim();
+	username = document.querySelector('#name').value.trim();
 
-    if(username) {
-        usernamePage.classList.add('hidden');
-        chatPage.classList.remove('hidden');
+	if (username) {
+		usernamePage.classList.add('hidden');
+		chatPage.classList.remove('hidden');
 
-        $.ajax({
-    		type: "POST",
-    		url: "/login",
-    		data: {username: username},
-    		success: function () {
-    			 var socket = new SockJS('/gs-guide-websocket');
-    		        stompClient = Stomp.over(socket);
+		$.ajax({
+			type: "POST",
+			url: "/login",
+			data: {username: username},
+			success: function () {
+				var socket = new SockJS('/gs-guide-websocket');
+				stompClient = Stomp.over(socket);
+				stompClient.connect({}, onConnected, onError);
+			},
+			error: function () {
+				alert('重名了');
+				location.reload();
+			}
+		});
 
-    		        stompClient.connect({}, onConnected, onError);
-    		},
-    		error: function () {
-    			alert('重名了');
-    		}
-    	});
-        
-        
-       
-    }
-    event.preventDefault();
+
+
+	}
+	event.preventDefault();
 }
 
 
 function onConnected() {
-	
+
 	/*
-	stompClient.subscribe('/user/topic/private', function (greeting) {
-			var parse = JSON.parse(greeting.body);
-			showMessage(parse.content, parse.name);
-		}); 
-	 */	
-	
-    // Subscribe to the Public Topic
+	 stompClient.subscribe('/user/topic/private', function (greeting) {
+	 var parse = JSON.parse(greeting.body);
+	 showMessage(parse.content, parse.name);
+	 }); 
+	 */
+
+	// Subscribe to the Public Topic
 //    stompClient.subscribe('/topic/public', onMessageReceived);
-    stompClient.subscribe('/user/topic/private', onMessageReceived);
+	stompClient.subscribe('/user/topic/private', onMessageReceived);
 
-    // Tell your username to the server
-    stompClient.send("/app/chat.addUser",
-        {},
-        JSON.stringify({sender: username, type: 'JOIN'})
-    )
+	// Tell your username to the server
+	stompClient.send("/app/chat.addUser",
+		{},
+		JSON.stringify({sender: username, type: 'JOIN'})
+		);
 
-    connectingElement.classList.add('hidden');
+	connectingElement.classList.add('hidden');
 }
 
 
 function onError(error) {
-    connectingElement.textContent = 'Could not connect to WebSocket server. Please refresh this page to try again!';
-    connectingElement.style.color = 'red';
+	connectingElement.textContent = 'Could not connect to WebSocket server. Please refresh this page to try again!';
+	connectingElement.style.color = 'red';
 }
 
 
 function sendMessage(event) {
-    var messageContent = messageInput.value.trim();
+	var messageContent = messageInput.value.trim();
+	if (messageContent && stompClient) {
+		stompClient.send("/app/private", {}, JSON.stringify(
+			{'name': username, 'content': messageInput.value, 'receiver': '\u5ba2\u670d\u5c0f\u59d0'}));
 
-    if(messageContent && stompClient) {
-        stompClient.send("/app/private", {}, JSON.stringify(
-        		{'name': username, 'content': messageInput.value, 'receiver': '\u5ba2\u670d\u5c0f\u59d0'}));
-    	
-        messageInput.value = '';
-    }
-    event.preventDefault();
+		messageInput.value = '';
+	}
+	event.preventDefault();
 }
 
 
 function onMessageReceived(payload) {
-	
-    var message = JSON.parse(payload.body);
-    var messageElement = document.createElement('li');
-    
-    if(message.type === 'JOIN') {
-        messageElement.classList.add('event-message');
-        message.content = message.name + ' joined!';
-    } else if (message.type === 'LEAVE') {
-        messageElement.classList.add('event-message');
-        message.content = message.name + ' left!';
-    } else {
-        messageElement.classList.add('chat-message');
-        console.log(message);
-        var avatarElement = document.createElement('i');
-        var avatarText = document.createTextNode(message.name);
-        avatarElement.appendChild(avatarText);
-        avatarElement.style['background-color'] = getAvatarColor(message.name);
 
-        messageElement.appendChild(avatarElement);
+	var message = JSON.parse(payload.body);
+	var messageElement = document.createElement('li');
+	if (message.type === 'JOIN') {
+		messageElement.classList.add('event-message');
+		message.content = message.name + ' joined!';
+	} else if (message.type === 'LEAVE') {
+		messageElement.classList.add('event-message');
+		message.content = message.name + ' left!';
+	} else {
+		messageElement.classList.add('chat-message');
+		console.log(message);
+		var avatarElement = document.createElement('i');
+		var avatarText = document.createTextNode(message.name);
+		avatarElement.appendChild(avatarText);
+		avatarElement.style['background-color'] = getAvatarColor(message.name);
 
-        var usernameElement = document.createElement('span');
-        var usernameText = document.createTextNode(message.name);
-        usernameElement.appendChild(usernameText);
-        messageElement.appendChild(usernameElement);
-    }
+		messageElement.appendChild(avatarElement);
 
-    var textElement = document.createElement('p');
-    var messageText = document.createTextNode(message.content);
-    textElement.appendChild(messageText);
+		var usernameElement = document.createElement('span');
+		var usernameText = document.createTextNode(message.name);
+		usernameElement.appendChild(usernameText);
+		messageElement.appendChild(usernameElement);
+	}
 
-    messageElement.appendChild(textElement);
+	var textElement = document.createElement('p');
+	var messageText = document.createTextNode(message.content);
+	textElement.appendChild(messageText);
 
-    messageArea.appendChild(messageElement);
-    messageArea.scrollTop = messageArea.scrollHeight;
+	messageElement.appendChild(textElement);
+
+	messageArea.appendChild(messageElement);
+	messageArea.scrollTop = messageArea.scrollHeight;
 }
 
 
 function getAvatarColor(messageSender) {
-    var hash = 0;
-    for (var i = 0; i < messageSender.length; i++) {
-        hash = 31 * hash + messageSender.charCodeAt(i);
-    }
+	var hash = 0;
+	for (var i = 0; i < messageSender.length; i++) {
+		hash = 31 * hash + messageSender.charCodeAt(i);
+	}
 
-    var index = Math.abs(hash % colors.length);
-    return colors[index];
+	var index = Math.abs(hash % colors.length);
+	return colors[index];
 }
 
-usernameForm.addEventListener('submit', connect, true)
-messageForm.addEventListener('submit', sendMessage, true)
+usernameForm.addEventListener('submit', connect, true);
+messageForm.addEventListener('submit', sendMessage, true);
